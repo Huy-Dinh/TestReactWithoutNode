@@ -40,9 +40,19 @@ class App extends React.Component {
   }
 
   render() {
-    return e('h1', null, 'Chich');
+    return e('div', 
+    null, 
+    e(CoronaCountByCountry, {
+      country:'Vietnam'
+    }, null),
+    e(CoronaCountByCountry, {
+      country:'Germany'
+    }, null),
+    e(CoronaCountByCountry, {
+      country:'Italy'
+    }, null));
   }
 }
 
 const domContainer = document.querySelector('#app_container');
-ReactDOM.render(e(CoronaCountByCountry, {country: 'World'}, null), domContainer);
+ReactDOM.render(e(App, {country: 'World'}, null), domContainer);
