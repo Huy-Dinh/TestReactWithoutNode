@@ -1,52 +1,48 @@
-/*
-var CommentBox = React.createClass({
-  render: function() {
-    return (
-      <div className="commentBox">
-        Hello, world! I am a CommentBox.
-      </div>
-    );
-  }
-});
-
-
-ReactDOM.render(
-  <CommentBox />,
-  document.getElementById('container')
-);
-*/
 "use strict";
 
 const e = React.createElement;
 
-class LikeButton extends React.Component {
+class CoronaCountByCountry extends React.Component {
+
   constructor(props) {
     super(props);
-    this.state = { liked: false };
+    this.country = this.props.country;
+    this.state = {
+      coronaCases: 0,
+      some: ''
+    }
+    this.fetchNumberOfCases = this.fetchNumberOfCases.bind(this);
+    this.intervalID = setInterval(this.fetchNumberOfCases, 500);
+  }
+
+  fetchNumberOfCases() {
+    fetch('https://corona.lmao.ninja/countries/' + this.country)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({coronaCases: data.cases})
+      });
   }
 
   render() {
-    if (this.state.liked) {
-      return e(
-        'div',
-        {onMouseEnter: () =>this.setState({liked: false})},
-        'You clicked this');
-    }
-
-    return e(
-      'button',
-      { 
-        onClick: () => {
-          setInterval( () => {
-            this.setState({ liked: true })
-            console.log("chich");
-          }, 2000);
-        }
-      },
-      'Like'
+    return React.createElement(
+      'h1',
+      {},
+      this.country + ' has ' + this.state.coronaCases + ' case(s) of COVID-19'
     );
   }
 }
 
-const domContainer = document.querySelector('#like_button_container');
-ReactDOM.render(e(LikeButton), domContainer);
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return e('h1', null, 'Chich');
+  }
+}
+
+const domContainer = document.querySelector('#app_container');
+ReactDOM.render(e(CoronaCountByCountry, {country: 'World'}, null), domContainer);
